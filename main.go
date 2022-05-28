@@ -77,6 +77,17 @@ const advancedUsage = `Advanced options:
 	    root CA into. Options are: "system", "java" and "nss" (includes
 	    Firefox). Autodetected by default.
 
+	-country CODE
+	    Country Name (2 letter code) [AU]:
+    -province STATE
+        State or Province Name (full name) [Some-State]:
+    -locality NAME
+        Locality Name (eg, city) []:
+    -organization NAME
+        Organization Name (eg, company) [Internet Widgits Pty Ltd]:
+    -organizationalUnit NAME
+        Organizational Unit Name (eg, section) []:
+
 `
 
 // Version can be set at link time to override debug.BuildInfo.Main.Version,
@@ -103,6 +114,18 @@ func main() {
 		keyFileFlag   = flag.String("key-file", "", "")
 		p12FileFlag   = flag.String("p12-file", "", "")
 		versionFlag   = flag.Bool("version", false, "")
+// 		Addition to the original project:
+// 		Country Name (2 letter code) [AU]:US
+//      State or Province Name (full name) [Some-State]:Massachusetts
+//      Locality Name (eg, city) []:Worcester
+//      Organization Name (eg, company) [Internet Widgits Pty Ltd]:God Of Kebab's Guide to the WWW
+//      Organizational Unit Name (eg, section) []:Networking
+//      Common Name (e.g. server FQDN or YOUR name) []:
+		countryFlag   = flag.String("country", "", "")
+		provinceFlag   = flag.String("province", "", "")
+		localityFlag   = flag.String("locality", "", "")
+		organizationFlag   = flag.String("organization", "", "")
+		organizationalUnitFlag   = flag.String("organizationalUnit", "", "")
 	)
 	flag.Usage = func() {
 		fmt.Fprint(flag.CommandLine.Output(), shortUsage)
@@ -146,6 +169,8 @@ func main() {
 		installMode: *installFlag, uninstallMode: *uninstallFlag, csrPath: *csrFlag,
 		pkcs12: *pkcs12Flag, ecdsa: *ecdsaFlag, client: *clientFlag,
 		certFile: *certFileFlag, keyFile: *keyFileFlag, p12File: *p12FileFlag,
+		country: *countryFlag, province: *provinceFlag, locality: *localityFlag,
+		organization: *organizationFlag, organizationalUnit: *organizationalUnitFlag,
 	}).Run(flag.Args())
 }
 
@@ -157,6 +182,9 @@ type mkcert struct {
 	pkcs12, ecdsa, client      bool
 	keyFile, certFile, p12File string
 	csrPath                    string
+
+	country, province, locality   string
+	organization, organizationalUnit   string
 
 	CAROOT string
 	caCert *x509.Certificate
@@ -174,7 +202,7 @@ func (m *mkcert) Run(args []string) {
 		log.Fatalln("ERROR: failed to find the default CA location, set one as the CAROOT env var")
 	}
 	fatalIfErr(os.MkdirAll(m.CAROOT, 0755), "failed to create the CAROOT")
-	m.loadCA()
+	m.loadCA(args)
 
 	if m.installMode {
 		m.install()

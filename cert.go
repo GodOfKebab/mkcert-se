@@ -61,11 +61,16 @@ func (m *mkcert) makeCert(hosts []string) {
 	// including custom roots. See https://support.apple.com/en-us/HT210176.
 	expiration := time.Now().AddDate(2, 3, 0)
 
+	country, province, locality, organization, organizationalUnit := m.orgNames(hosts)
+
 	tpl := &x509.Certificate{
 		SerialNumber: randomSerialNumber(),
 		Subject: pkix.Name{
-			Organization:       []string{"mkcert development certificate"},
-			OrganizationalUnit: []string{userAndHostname},
+		    Country:            []string{country},
+		    Province:           []string{province},
+		    Locality:           []string{locality},
+		    Organization:       []string{organization + " CA"},
+			OrganizationalUnit: []string{organizationalUnit},
 		},
 
 		NotBefore: time.Now(), NotAfter: expiration,
@@ -199,6 +204,22 @@ func (m *mkcert) fileNames(hosts []string) (certFile, keyFile, p12File string) {
 	return
 }
 
+func (m *mkcert) orgNames(hosts []string) (country, province, locality, organization, organizationalUnit string) {
+	country = "US"
+	province = "Massachusetts"
+	locality = "Worcester"
+	organization = "mkcert development"
+	organizationalUnit = userAndHostname
+
+	if m.country != "" { country = m.country }
+	if m.province != "" { province = m.province }
+	if m.locality != "" { locality = m.locality }
+	if m.organization != "" { organization = m.organization }
+	if m.organizationalUnit != "" { organizationalUnit = m.organizationalUnit }
+
+	return
+}
+
 func randomSerialNumber() *big.Int {
 	serialNumberLimit := new(big.Int).Lsh(big.NewInt(1), 128)
 	serialNumber, err := rand.Int(rand.Reader, serialNumberLimit)
@@ -279,9 +300,9 @@ func (m *mkcert) makeCertFromCSR() {
 }
 
 // loadCA will load or create the CA at CAROOT.
-func (m *mkcert) loadCA() {
+func (m *mkcert) loadCA(hosts []string) {
 	if !pathExists(filepath.Join(m.CAROOT, rootName)) {
-		m.newCA()
+		m.newCA(hosts)
 	}
 
 	certPEMBlock, err := ioutil.ReadFile(filepath.Join(m.CAROOT, rootName))
@@ -307,7 +328,7 @@ func (m *mkcert) loadCA() {
 	fatalIfErr(err, "failed to parse the CA key")
 }
 
-func (m *mkcert) newCA() {
+func (m *mkcert) newCA(hosts []string) {
 	priv, err := m.generateKey(true)
 	fatalIfErr(err, "failed to generate the CA key")
 	pub := priv.(crypto.Signer).Public()
@@ -324,11 +345,16 @@ func (m *mkcert) newCA() {
 
 	skid := sha1.Sum(spki.SubjectPublicKey.Bytes)
 
+	country, province, locality, organization, organizationalUnit := m.orgNames(hosts)
+
 	tpl := &x509.Certificate{
 		SerialNumber: randomSerialNumber(),
 		Subject: pkix.Name{
-			Organization:       []string{"mkcert development CA"},
-			OrganizationalUnit: []string{userAndHostname},
+		    Country:            []string{country},
+		    Province:           []string{province},
+		    Locality:           []string{locality},
+		    Organization:       []string{organization + " CA"},
+			OrganizationalUnit: []string{organizationalUnit},
 
 			// The CommonName is required by iOS to show the certificate in the
 			// "Certificate Trust Settings" menu.
