@@ -91,12 +91,16 @@ To only install the local root CA into a subset of them, you can set the `TRUST_
 	
 	-country CODE
 	    Country Name (2 letter code) [AU]:
+    
     -province STATE
         State or Province Name (full name) [Some-State]:
+    
     -locality NAME
         Locality Name (eg, city) []:
+    
     -organization NAME
         Organization Name (eg, company) [Internet Widgits Pty Ltd]:
+    
     -organizationalUnit NAME
         Organizational Unit Name (eg, section) []:
 
