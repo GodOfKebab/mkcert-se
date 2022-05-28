@@ -88,6 +88,18 @@ To only install the local root CA into a subset of them, you can set the `TRUST_
 	-csr CSR
 	    Generate a certificate based on the supplied CSR. Conflicts with
 	    all other flags and arguments except -install and -cert-file.
+	
+	-country CODE
+	    Country Name (2 letter code) [AU]:
+    -province STATE
+        State or Province Name (full name) [Some-State]:
+    -locality NAME
+        Locality Name (eg, city) []:
+    -organization NAME
+        Organization Name (eg, company) [Internet Widgits Pty Ltd]:
+    -organizationalUnit NAME
+        Organizational Unit Name (eg, section) []:
+
 ```
 
 > **Note:** You _must_ place these options before the domain names list.
