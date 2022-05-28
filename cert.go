@@ -69,7 +69,7 @@ func (m *mkcert) makeCert(hosts []string) {
 		    Country:            []string{country},
 		    Province:           []string{province},
 		    Locality:           []string{locality},
-		    Organization:       []string{organization + " CA"},
+		    Organization:       []string{organization + " certificate"},
 			OrganizationalUnit: []string{organizationalUnit},
 		},
 
