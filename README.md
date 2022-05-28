@@ -43,12 +43,10 @@ go build -ldflags "-X main.Version=$(git describe --tags)"
 or use [the pre-built binaries](https://github.com/GodOfKebab/mkcert-se/releases).
 
 ```
-
 curl -L https://github.com/GodOfKebab/mkcert-se/releases/download/v1.4.5.1/mkcert-v1.4.5.1-darwin-amd64 -o mkcert
 chmod +x mkcert
 
 sudo cp mkcert /usr/bin
-
 ```
 
 If you're running into permission problems try running `mkcert` as an Administrator.
