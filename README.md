@@ -40,17 +40,16 @@ git clone https://github.com/GodOfKebab/mkcert-se.git && cd mkcert-se
 go build -ldflags "-X main.Version=$(git describe --tags)"
 ```
 
-[comment]: <> (or use [the pre-built binaries]&#40;https://github.com/FiloSottile/mkcert/releases&#41;.)
+or use [the pre-built binaries](https://github.com/GodOfKebab/mkcert-se/releases).
 
-[comment]: <> (```)
+```
 
-[comment]: <> (curl -JLO "https://dl.filippo.io/mkcert/latest?for=linux/amd64")
+curl -L https://github.com/GodOfKebab/mkcert-se/releases/download/v1.4.5.1/mkcert-v1.4.5.1-darwin-amd64 -o mkcert
+chmod +x mkcert
 
-[comment]: <> (chmod +x mkcert-v*-linux-amd64)
+sudo cp mkcert /usr/bin
 
-[comment]: <> (sudo cp mkcert-v*-linux-amd64 /usr/local/bin/mkcert)
-
-[comment]: <> (```)
+```
 
 If you're running into permission problems try running `mkcert` as an Administrator.
 
