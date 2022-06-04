@@ -33,14 +33,16 @@ mkcert automatically creates and installs a local CA in the system root store, a
 
 > **Warning**: the `rootCA-key.pem` file that mkcert automatically generates gives complete power to intercept secure requests from your machine. Do not share it.
 
-Currently, only way to get the execucatable is to build from source (requires Go 1.13+)
+Currently, there are two ways to get the executable.
+
+### Build from source (requires Go 1.13+)
 
 ```
 git clone https://github.com/GodOfKebab/mkcert-se.git && cd mkcert-se
 go build -ldflags "-X main.Version=$(git describe --tags)"
 ```
 
-or use [the pre-built binaries](https://github.com/GodOfKebab/mkcert-se/releases).
+### use [the pre-built binaries](https://github.com/GodOfKebab/mkcert-se/releases).
 
 ```
 curl -L https://github.com/GodOfKebab/mkcert-se/releases/download/v1.4.5.1/mkcert-v1.4.5.1-darwin-amd64 -o mkcert
